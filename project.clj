@@ -1,11 +1,7 @@
 (require '[clojure.java.shell])
 (require '[clojure.string])
 
-(def VERSION
-  (do (-> (clojure.java.shell/sh "git" "describe" "--match" "v0.0")
-          (:out)
-          (.trim)
-          (subs 1))))
+(def VERSION "0.1.0-SNAPSHOT")
 
 (defproject spellhouse/clairvoyant VERSION
   :description "ClojureScript tracing library"

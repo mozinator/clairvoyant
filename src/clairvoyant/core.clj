@@ -85,28 +85,131 @@
   "Recursively trace one or more forms."
   {:arglists '([& forms] [{:keys [tracer onoffvar]} & forms])}
   [& forms]
-    (let [opts (when (and (map? (first forms))
-                          (or (contains? (first forms) :tracer)
-                              (contains? (first forms) :onoffvar)))
-                 (first forms))
-          forms (if opts
-                  (next forms)
-                  forms)
-          tracer (if-let [tracer (:tracer opts)]
+  (let [opts (when (and (map? (first forms))
+                        (or (contains? (first forms) :tracer)
+                            (contains? (first forms) :onoffvar)))
+               (first forms))
+        forms (if opts
+                (next forms)
+                forms)
+        tracer (if-let [tracer (:tracer opts)]
+                 tracer
+                 (if-let [tracer (:clairvoyant/tracer (meta *ns*))]
                    tracer
-                   (if-let [tracer (:clairvoyant/tracer (meta *ns*))]
-                     tracer
-                     'clairvoyant.core/default-tracer))
-          onoffvar (if-let [onoffvar (:onoffvar opts)]
-                     onoffvar
-                     dev?)]
-      (binding [*tracer* tracer]
-        (let [traced-forms (doall (for [form forms]
-                                    (trace-form form &env)))]
-          `(if ~onoffvar
-             (do ~@traced-forms)
-             (do ~@forms))))))
+                   'clairvoyant.core/default-tracer))
+        onoffvar (if-let [onoffvar (:onoffvar opts)]
+                   onoffvar
+                   dev?)]
+    (binding [*tracer* tracer]
+      (let [traced-forms (doall (for [form forms]
+                                  (trace-form form &env)))]
+        `(if ~onoffvar
+           (do ~@traced-forms)
+           (do ~@forms))))))
 
+(defmacro trace-events
+  "Recursively trace one or more forms."
+  {:arglists '([& forms] [{:keys [tracer onoffvar]} & forms])}
+  [& forms]
+  (let [opts (when (and (map? (first forms))
+                        (or (contains? (first forms) :tracer)
+                            (contains? (first forms) :onoffvar)))
+               (first forms))
+        forms (if opts
+                (next forms)
+                forms)
+        tracer (if-let [tracer (:tracer opts)]
+                 tracer
+                 (if-let [tracer (:clairvoyant/tracer (meta *ns*))]
+                   tracer
+                   'clairvoyant.core/tracer-green))
+        onoffvar (if-let [onoffvar (:onoffvar opts)]
+                   onoffvar
+                   dev?)]
+    (binding [*tracer* tracer]
+      (let [traced-forms (doall (for [form forms]
+                                  (trace-form form &env)))]
+        `(if ~onoffvar
+           (do ~@traced-forms)
+           (do ~@forms))))))
+
+(defmacro trace-subs
+  "Recursively trace one or more forms."
+  {:arglists '([& forms] [{:keys [tracer onoffvar]} & forms])}
+  [& forms]
+  (let [opts (when (and (map? (first forms))
+                        (or (contains? (first forms) :tracer)
+                            (contains? (first forms) :onoffvar)))
+               (first forms))
+        forms (if opts
+                (next forms)
+                forms)
+        tracer (if-let [tracer (:tracer opts)]
+                 tracer
+                 (if-let [tracer (:clairvoyant/tracer (meta *ns*))]
+                   tracer
+                   'clairvoyant.core/tracer-brown))
+        onoffvar (if-let [onoffvar (:onoffvar opts)]
+                   onoffvar
+                   dev?)]
+    (binding [*tracer* tracer]
+      (let [traced-forms (doall (for [form forms]
+                                  (trace-form form &env)))]
+        `(if ~onoffvar
+           (do ~@traced-forms)
+           (do ~@forms))))))
+
+(defmacro trace-ui
+  "Recursively trace one or more forms."
+  {:arglists '([& forms] [{:keys [tracer onoffvar]} & forms])}
+  [& forms]
+  (let [opts (when (and (map? (first forms))
+                        (or (contains? (first forms) :tracer)
+                            (contains? (first forms) :onoffvar)))
+               (first forms))
+        forms (if opts
+                (next forms)
+                forms)
+        tracer (if-let [tracer (:tracer opts)]
+                 tracer
+                 (if-let [tracer (:clairvoyant/tracer (meta *ns*))]
+                   tracer
+                   'clairvoyant.core/tracer-gold))
+        onoffvar (if-let [onoffvar (:onoffvar opts)]
+                   onoffvar
+                   dev?)]
+    (binding [*tracer* tracer]
+      (let [traced-forms (doall (for [form forms]
+                                  (trace-form form &env)))]
+        `(if ~onoffvar
+           (do ~@traced-forms)
+           (do ~@forms))))))
+
+(defmacro trace-fx
+  "Recursively trace one or more forms."
+  {:arglists '([& forms] [{:keys [tracer onoffvar]} & forms])}
+  [& forms]
+  (let [opts (when (and (map? (first forms))
+                        (or (contains? (first forms) :tracer)
+                            (contains? (first forms) :onoffvar)))
+               (first forms))
+        forms (if opts
+                (next forms)
+                forms)
+        tracer (if-let [tracer (:tracer opts)]
+                 tracer
+                 (if-let [tracer (:clairvoyant/tracer (meta *ns*))]
+                   tracer
+                   'clairvoyant.core/tracer-red))
+        onoffvar (if-let [onoffvar (:onoffvar opts)]
+                   onoffvar
+                   dev?)]
+    (binding [*tracer* tracer]
+      (let [traced-forms (doall (for [form forms]
+                                  (trace-form form &env)))]
+        `(if ~onoffvar
+           (do ~@traced-forms)
+           (do ~@forms))))))
 
 ;; ---------------------------------------------------------------------
 ;; Form tracing
@@ -406,4 +509,3 @@
                      :ns '~(.-name *ns*)}
         new-specs (trace-protocol-specs specs trace-data env)]
     `(~op ~tsym ~fields ~@new-specs)))
-

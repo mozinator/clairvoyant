@@ -37,7 +37,7 @@
 ;; ---------------------------------------------------------------------
 ;; Core tracers
 
-(goog-define devmode false)
+(goog-define devmode true)
 
 (def ^:private fn-re
   "Matches the function signature of the result of (str f) where f is a
